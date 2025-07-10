@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -16,6 +17,7 @@ return new class extends Migration {
             $table->date('dob')->nullable();
             $table->ipAddress('ip')->nullable();
             $table->text('address')->nullable();
+            $table->json('permissions')->nullable();
             $table->timestamps();
         });
     }

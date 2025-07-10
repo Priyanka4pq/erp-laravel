@@ -2,18 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class SubAdmin extends Authenticatable
+class SubAdmin extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'email', 'password', 'phone', 'dob', 'ip', 'address', 'permissions'];
 
-    protected $fillable = [
-        'name', 'email', 'password', 'phone', 'dob', 'ip', 'address',
-    ];
-
-    protected $hidden = [
-        'password',
+    protected $casts = [
+        'permissions' => 'array',
     ];
 }
