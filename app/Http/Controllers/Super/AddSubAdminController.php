@@ -27,10 +27,15 @@ class AddSubAdminController extends Controller
                 'ip' => 'nullable|ip',
                 'address' => 'nullable|string',
                 'permissions' => 'nullable|array',
+                'role' => 'nullable|string|max:255',
                 'permissions.*' => 'string|max:255',
             ]);
 
-            $validated['password'] = Hash::make($validated['password']);
+            $validated['password'] = Hash::make($validated['password']);        
+
+
+
+
             SubAdmin::create($validated);
 
             return response()->json(['success' => 'Sub-Admin created successfully'], 201);
@@ -54,6 +59,7 @@ class AddSubAdminController extends Controller
                 'ip' => 'nullable|ip',
                 'address' => 'nullable|string',
                 'permissions' => 'nullable|array',
+                'role' => 'nullable|string|max:255',
                 'permissions.*' => 'string|max:255',
             ]);
 
@@ -62,6 +68,9 @@ class AddSubAdminController extends Controller
             } else {
                 unset($validated['password']);
             }
+            
+     
+
 
             $subAdmin->update($validated);
 
@@ -85,4 +94,17 @@ class AddSubAdminController extends Controller
             return response()->json(['error' => 'Failed to fetch sub-admins'], 500);
         }
     }
+
+    public function destroy($id)
+{
+    try {
+        $subAdmin = SubAdmin::findOrFail($id);
+        $subAdmin->delete();
+
+        return response()->json(['success' => 'Sub-Admin deleted successfully'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to delete sub-admin'], 500);
+    }
+}
+
 }
