@@ -142,7 +142,6 @@
 
 // import { useEffect, useState } from "react";
 
-
 // import { Eye, Edit, Trash2 } from "lucide-react";
 // import PermissionModal from "./PermissionModal";
 // import PermissionForm from "./PermissionForm";
@@ -311,7 +310,6 @@
 //   );
 // }
 
-
 // pages/PermissionPage.jsx
 "use client";
 
@@ -322,178 +320,212 @@ import PermissionModal from "./PermissionModal";
 import PermissionForm from "./PermissionForm";
 import Loader from "@/components/Loader";
 export default function PermissionPage() {
-  const [permissions, setPermissions] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [viewGroup, setViewGroup] = useState(null);
-  const [editData, setEditData] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+    const [permissions, setPermissions] = useState([]);
+    const [showForm, setShowForm] = useState(false);
+    const [viewGroup, setViewGroup] = useState(null);
+    const [editData, setEditData] = useState(null);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-  // Fetch permissions
-  const fetchPermissions = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get("/supper/permission-list");
-      setPermissions(response.data);
-      setError("");
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to fetch permissions. Please try again.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // Fetch permissions
+    const fetchPermissions = async () => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.get("/supper/permission-list");
+            setPermissions(response.data);
+            setError("");
+        } catch (err) {
+            setError(
+                err.response?.data?.error ||
+                    "Failed to fetch permissions. Please try again."
+            );
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(() => {
-    fetchPermissions();
-  }, []);
-
-  // Handle save (create or update)
-  const handleSave = async (data, id) => {
-    setLoading(true);
-    try {
-      if (id) {
-        await axiosInstance.put(`/supper/permission/${id}`, data);
-      } else {
-        await axiosInstance.post("/supper/permission", data);
-      }
-      fetchPermissions();
-      setShowForm(false);
-      setEditData(null);
-      setError("");
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to save permission. Please try again.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle delete
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this permission?")) {
-      setLoading(true);
-      try {
-        await axiosInstance.delete(`/supper/permission/${id}`);
+    useEffect(() => {
         fetchPermissions();
-        setError("");
-      } catch (err) {
-        setError(err.response?.data?.error || "Failed to delete permission. Please try again.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
+    }, []);
 
-  return (
-    <div className="p-6 relative">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
-          Permissions
-        </h1>
-        <button
-          onClick={() => setShowForm(true)}
-          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition disabled:opacity-50"
-          disabled={loading}
-        >
-          Add Permission
-        </button>
-      </div>
+    // Handle save (create or update)
+    const handleSave = async (data, id) => {
+        setLoading(true);
+        try {
+            if (id) {
+                await axiosInstance.put(`/supper/permission/${id}`, data);
+            } else {
+                await axiosInstance.post("/supper/permission", data);
+            }
+            fetchPermissions();
+            setShowForm(false);
+            setEditData(null);
+            setError("");
+        } catch (err) {
+            setError(
+                err.response?.data?.error ||
+                    "Failed to save permission. Please try again."
+            );
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-      {/* Error Message */}
-      {error && (
-        <p className="text-sm text-red-600 dark:text-red-400 mb-4">{error}</p>
-      )}
+    // Handle delete
+    const handleDelete = async (id) => {
+        if (
+            window.confirm("Are you sure you want to delete this permission?")
+        ) {
+            setLoading(true);
+            try {
+                await axiosInstance.delete(`/supper/permission/${id}`);
+                fetchPermissions();
+                setError("");
+            } catch (err) {
+                setError(
+                    err.response?.data?.error ||
+                        "Failed to delete permission. Please try again."
+                );
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
 
-      {/* Loader */}
-      {loading && <Loader message="Processing..." />}
+    return (
+        <div className="p-6 relative">
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                    Permissions
+                </h1>
+                <button
+                    onClick={() => setShowForm(true)}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition disabled:opacity-50"
+                    disabled={loading}
+                >
+                    Add Permission
+                </button>
+            </div>
 
-      {/* Permissions Table */}
-      {!loading && (
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border border-gray-200 dark:border-gray-700 text-sm">
-            <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
-              <tr>
-                <th className="px-4 py-3 border-b dark:border-gray-700 text-left">Module</th>
-                <th className="px-4 py-3 border-b dark:border-gray-700 text-left">Permissions</th>
-                <th className="px-4 py-3 border-b dark:border-gray-700 text-left">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {permissions.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="3"
-                    className="px-4 py-4 text-center text-gray-500 dark:text-gray-400"
-                  >
-                    No permissions added yet.
-                  </td>
-                </tr>
-              ) : (
-                permissions.map((group) => (
-                  <tr
-                    key={group.id}
-                    className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-                  >
-                    <td className="px-4 py-3 text-gray-800 dark:text-white font-medium">
-                      {group.feature}
-                    </td>
-                    <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
-                      {group.permissions.join(", ")}
-                    </td>
-                    <td className="px-4 py-3 flex gap-3 text-indigo-600 dark:text-indigo-400">
-                      <button onClick={() => setViewGroup(group)} title="View" disabled={loading}>
-                        <Eye className="w-5 h-5 hover:text-blue-600" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditData(group);
-                          setShowForm(true);
+            {/* Error Message */}
+            {error && (
+                <p className="text-sm text-red-600 dark:text-red-400 mb-4">
+                    {error}
+                </p>
+            )}
+
+            {/* Loader */}
+            {loading && <Loader message="Processing..." />}
+
+            {/* Permissions Table */}
+            {!loading && (
+                <div className="overflow-x-auto">
+                    <table className="w-full table-auto border border-gray-200 dark:border-gray-700 text-sm">
+                        <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+                            <tr>
+                                <th className="px-4 py-3 border-b dark:border-gray-700 text-left">
+                                    Module
+                                </th>
+                                <th className="px-4 py-3 border-b dark:border-gray-700 text-left">
+                                    Permissions
+                                </th>
+                                <th className="px-4 py-3 border-b dark:border-gray-700 text-left">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {permissions.length === 0 ? (
+                                <tr>
+                                    <td
+                                        colSpan="3"
+                                        className="px-4 py-4 text-center text-gray-500 dark:text-gray-400"
+                                    >
+                                        No permissions added yet.
+                                    </td>
+                                </tr>
+                            ) : (
+                                permissions.map((group) => (
+                                    <tr
+                                        key={group.id}
+                                        className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                                    >
+                                        <td className="px-4 py-3 text-gray-800 dark:text-white font-medium">
+                                            {group.feature}
+                                        </td>
+                                        <td className="px-4 py-3 text-gray-600 dark:text-gray-300">
+                                            {group.permissions.join(", ")}
+                                        </td>
+                                        <td className="px-4 py-3 flex gap-3 text-indigo-600 dark:text-indigo-400">
+                                            <button
+                                                onClick={() =>
+                                                    setViewGroup(group)
+                                                }
+                                                title="View"
+                                                disabled={loading}
+                                            >
+                                                <Eye className="w-5 h-5 hover:text-blue-600" />
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setEditData(group);
+                                                    setShowForm(true);
+                                                }}
+                                                title="Edit"
+                                                disabled={loading}
+                                            >
+                                                <Edit className="w-5 h-5 hover:text-yellow-600" />
+                                            </button>
+                                            <button
+                                                onClick={() =>
+                                                    handleDelete(group.id)
+                                                }
+                                                title="Delete"
+                                                disabled={loading}
+                                            >
+                                                <Trash2 className="w-5 h-5 hover:text-red-600" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* View Modal */}
+            {viewGroup && (
+                <PermissionModal
+                    group={viewGroup}
+                    onClose={() => setViewGroup(null)}
+                />
+            )}
+
+            {/* Form Drawer */}
+            {showForm && (
+                <>
+                    <PermissionForm
+                        onClose={() => {
+                            setShowForm(false);
+                            setEditData(null);
                         }}
-                        title="Edit"
-                        disabled={loading}
-                      >
-                        <Edit className="w-5 h-5 hover:text-yellow-600" />
-                      </button>
-                      <button onClick={() => handleDelete(group.id)} title="Delete" disabled={loading}>
-                        <Trash2 className="w-5 h-5 hover:text-red-600" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                        onSave={handleSave}
+                        editData={editData}
+                        loading={loading}
+                    />
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40"
+                        onClick={() => {
+                            setShowForm(false);
+                            setEditData(null);
+                        }}
+                    />
+                </>
+            )}
         </div>
-      )}
-
-      {/* View Modal */}
-      {viewGroup && (
-        <PermissionModal group={viewGroup} onClose={() => setViewGroup(null)} />
-      )}
-
-      {/* Form Drawer */}
-      {showForm && (
-        <>
-          <PermissionForm
-            onClose={() => {
-              setShowForm(false);
-              setEditData(null);
-            }}
-            onSave={handleSave}
-            editData={editData}
-            loading={loading}
-          />
-          <div
-            className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40"
-            onClick={() => {
-              setShowForm(false);
-              setEditData(null);
-            }}
-          />
-        </>
-      )}
-    </div>
-  );
+    );
 }

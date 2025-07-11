@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubAdmin extends Model
 {
-    protected $fillable = ['name', 'email', 'password', 'phone', 'dob', 'ip', 'address', 'permissions'];
+    protected $fillable = ['name', 'email', 'password', 'phone', 'dob', 'ip', 'address', 'role','permissions'];
 
     protected $casts = [
-        'permissions' => 'array',
+        'permissions' => 'array',   
+        // 'module' => 'array',
     ];
 }

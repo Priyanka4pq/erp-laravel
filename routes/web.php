@@ -15,6 +15,9 @@ Route::post('/test-post', function () {
     return response()->json(['message' => 'CSRF bypassed']);
 });
 
+
+
+
 // ---------------- Super Admin Routes ----------------
 Route::prefix('supper')->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\SupperAdminDashboardController::class, 'index'])->name('supper.dashboard.index');
@@ -28,6 +31,13 @@ Route::prefix('supper')->group(function () {
     Route::get('permission-list', [PermissionController::class, 'fetch']);
     Route::put('permission/{id}', [PermissionController::class, 'update']);
     Route::delete('permission/{id}', [PermissionController::class, 'destroy']);
+    Route::get('roles', [PermissionController::class, 'getRoles']);
+    Route::delete('delete-subadmin/{id}', [AddSubAdminController::class, 'destroy'])->name('supper.delete-subadmin');
+
+
+// role route added
+
+
 });
 
 

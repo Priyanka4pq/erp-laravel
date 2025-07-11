@@ -36,28 +36,28 @@
 
 // export default axiosInstance;
 
-
 // utils/axiosInstance.js
 import axios from "axios";
 
-const BASE_URL =  "http://127.0.0.1:8000";
+const BASE_URL = "http://127.0.0.1:8000";
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-  },
+    baseURL: BASE_URL,
+    withCredentials: true,
+    headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+    },
 });
 
 // Response interceptor for basic error handling
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error("Response error:", error.response?.data || error.message);
-    return Promise.reject(error);
-  }
+    (response) => response,
+    (error) => {
+        console.error("Response error:", error.response?.data || error.message);
+        return Promise.reject(error);
+    }
 );
 
 export default axiosInstance;

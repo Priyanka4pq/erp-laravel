@@ -66,4 +66,14 @@ class PermissionController extends Controller
             'success' => $deleted > 0,
         ]);
     }
+
+    // Get Roles
+    public function getRoles()
+    {
+        // Assuming each permission group has a `feature` (like "User Management", "Reports", etc.)
+        $roles = \App\Models\Permission::pluck('feature')->unique()->values();
+    
+        return response()->json($roles);
+    }
+    
 }
