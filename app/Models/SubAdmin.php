@@ -12,4 +12,8 @@ class SubAdmin extends Model
         'permissions' => 'array',   
         // 'module' => 'array',
     ];
+    public function tokens()
+    {
+        return $this->hasMany(Token::class);
+    }
 }

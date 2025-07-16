@@ -5,6 +5,7 @@ use App\Http\Controllers\Super\AddSubAdminController;
 use App\Http\Controllers\Super\PermissionController;
 use App\Http\Controllers\Super\SupperAdminDashboardController;
 use App\Http\Controllers\SubAdminDashboardController;
+use App\Http\Controllers\Super\TokenController;
 
 // ---------------- Simple Test POST Routes ----------------
 Route::post('/ping', function () {
@@ -33,6 +34,14 @@ Route::prefix('supper')->group(function () {
     Route::delete('permission/{id}', [PermissionController::class, 'destroy']);
     Route::get('roles', [PermissionController::class, 'getRoles']);
     Route::delete('delete-subadmin/{id}', [AddSubAdminController::class, 'destroy'])->name('supper.delete-subadmin');
+// ---------------- Token Routes ----------------
+    Route::get('token', [\App\Http\Controllers\Super\TokenController::class, 'index'])
+        ->name('supper.token.index'); // Inertia page
+        Route::post('tokens', [TokenController::class, 'store'])->name('supper.token.store');
+Route::put('tokens/{id}', [TokenController::class, 'update'])->name('supper.token.update');
+Route::delete('tokens/{id}', [TokenController::class, 'destroy'])->name('supper.token.delete');
+Route::post('tokens/{id}/regenerate', [TokenController::class, 'regenerate']);
+
 
 
 // role route added
